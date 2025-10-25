@@ -2,8 +2,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Building2, User, Briefcase, Users, MapPin, Percent } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Building2, User, Briefcase, Users, MapPin, Percent, Sparkles, Loader2 } from "lucide-react";
 import { ClientData, PlanType, BillingCycle } from "@/pages/Index";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { useState } from "react";
 
 interface ClientFormProps {
   clientData: ClientData;
@@ -22,6 +27,34 @@ export const ClientForm = ({
   billingCycle,
   setBillingCycle,
 }: ClientFormProps) => {
+  const [transcription, setTranscription] = useState("");
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [painPoints, setPainPoints] = useState("");
+
+  const analyzePainPoints = async () => {
+    if (!transcription.trim()) {
+      toast.error("Por favor, cole a transcrição da chamada");
+      return;
+    }
+
+    setIsAnalyzing(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('analyze-pain-points', {
+        body: { transcription }
+      });
+
+      if (error) throw error;
+
+      setPainPoints(data.painPoints);
+      toast.success("Pontos de dor identificados com sucesso!");
+    } catch (error: any) {
+      console.error('Error analyzing pain points:', error);
+      toast.error(error.message || "Erro ao analisar transcrição");
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
   return (
     <Card className="border-2 shadow-lg animate-fade-in">
       <CardHeader className="bg-gradient-to-r from-radical/10 to-tangerine/10 border-b">
@@ -205,6 +238,56 @@ export const ClientForm = ({
               </div>
             </button>
           </div>
+        </div>
+
+        {/* AI Pain Points Analysis */}
+        <div className="space-y-4 pt-6 border-t">
+          <div>
+            <Label htmlFor="transcription" className="text-lg font-semibold flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-radical" />
+              Transcrição da Chamada (Opcional)
+            </Label>
+            <p className="text-sm text-muted-foreground mb-2">
+              Cole a transcrição da reunião e a IA identificará automaticamente os pontos de dor do cliente
+            </p>
+            <Textarea
+              id="transcription"
+              value={transcription}
+              onChange={(e) => setTranscription(e.target.value)}
+              placeholder="Cole aqui a transcrição completa da chamada com o cliente..."
+              className="min-h-[120px]"
+            />
+          </div>
+
+          <Button 
+            onClick={analyzePainPoints}
+            disabled={isAnalyzing || !transcription.trim()}
+            className="w-full"
+          >
+            {isAnalyzing ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Analisando...
+              </>
+            ) : (
+              <>
+                <Sparkles className="mr-2 h-4 w-4" />
+                Identificar Pontos de Dor com IA
+              </>
+            )}
+          </Button>
+
+          {painPoints && (
+            <div className="mt-4 p-4 bg-radical/5 border border-radical/20 rounded-lg">
+              <h4 className="font-semibold text-radical mb-2 flex items-center gap-2">
+                <Sparkles className="h-4 w-4" />
+                Principais Pontos de Dor Identificados:
+              </h4>
+              <div className="text-sm whitespace-pre-line text-foreground">
+                {painPoints}
+              </div>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>

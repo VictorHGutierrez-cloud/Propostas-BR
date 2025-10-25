@@ -1,1 +1,4 @@
 project_id = "rmzutxqatqgzadhikcrn"
+
+[functions.analyze-pain-points]
+verify_jwt = false
