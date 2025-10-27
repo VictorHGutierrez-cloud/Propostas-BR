@@ -59,14 +59,17 @@ export const ProposalGenerator = ({
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proposta Comercial - ${clientData.companyName}</title>
+    <title>Black Friday Factorial 2025 - ${clientData.companyName}</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #333; background: #f5f5f5; }
-        .container { max-width: 900px; margin: 40px auto; background: white; padding: 60px; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+        .container { max-width: 900px; margin: 40px auto; background: white; padding: 60px; box-shadow: 0 0 30px rgba(255,53,94,0.15); border: 3px solid #FF355E; }
+        .bf-banner { background: linear-gradient(135deg, #000000, #1a1a1a); color: white; text-align: center; padding: 20px; margin: -60px -60px 40px -60px; border-bottom: 4px solid #FF355E; }
+        .bf-banner h1 { font-size: 36px; font-weight: bold; margin-bottom: 5px; }
+        .bf-banner .discount { font-size: 48px; color: #FFD700; font-weight: bold; text-shadow: 0 0 20px rgba(255,215,0,0.5); }
         .header { text-align: center; padding-bottom: 40px; border-bottom: 3px solid #FF355E; }
         .logo { font-size: 48px; font-weight: bold; background: linear-gradient(135deg, #FF355E, #FF9153); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; }
-        h1 { color: #25253D; font-size: 32px; margin-bottom: 10px; }
+        h2 { color: #25253D; font-size: 28px; margin-bottom: 10px; }
         .subtitle { color: #666; font-size: 18px; }
         .section { margin: 40px 0; }
         .section-title { color: #FF355E; font-size: 24px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #eee; }
@@ -82,15 +85,24 @@ export const ProposalGenerator = ({
         .pricing-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.2); }
         .pricing-row:last-child { border: none; font-size: 24px; font-weight: bold; padding-top: 20px; }
         .badge { display: inline-block; padding: 8px 16px; background: #07A2AD; color: white; border-radius: 20px; font-size: 14px; font-weight: 600; }
+        .bf-badge { background: #FFD700; color: #000; font-weight: bold; padding: 10px 20px; border-radius: 25px; display: inline-block; margin: 20px 0; font-size: 16px; }
+        .urgency { background: #FFF3CD; border-left: 4px solid #FFD700; padding: 15px; margin: 20px 0; border-radius: 4px; }
         .footer { text-align: center; margin-top: 60px; padding-top: 30px; border-top: 2px solid #eee; color: #666; }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="bf-banner">
+            <h1>🔥 BLACK FRIDAY 2025 🔥</h1>
+            <div class="discount">Oferta Especial Factorial</div>
+            <p style="font-size: 18px; margin-top: 10px;">Aproveite descontos exclusivos!</p>
+        </div>
+        
         <div class="header">
             <div class="logo">FACTORIAL</div>
-            <h1>Proposta Comercial</h1>
+            <h2>Proposta Black Friday</h2>
             <p class="subtitle">Solução Completa de RH</p>
+            <div class="bf-badge">✨ OFERTA LIMITADA ✨</div>
         </div>
 
         <div class="section">
@@ -137,8 +149,13 @@ export const ProposalGenerator = ({
             </ul>
         </div>
 
+        <div class="urgency">
+            <strong>⚠️ Atenção:</strong> Esta é uma oferta exclusiva da Black Friday Factorial 2025. 
+            Condições especiais válidas apenas durante o período promocional!
+        </div>
+
         <div class="section">
-            <h2 class="section-title">💰 Resumo Financeiro</h2>
+            <h2 class="section-title">💰 Resumo Financeiro - Black Friday</h2>
             <div class="pricing-summary">
                 <div class="pricing-row">
                     <span>Subtotal (${billingCycle === "monthly" ? "Mensal" : "Anual"})</span>
@@ -164,10 +181,13 @@ export const ProposalGenerator = ({
         </div>
 
         <div class="footer">
-            <p><strong>Factorial Brasil</strong></p>
+            <p><strong>Factorial Brasil - Black Friday 2025</strong></p>
             <p>Data da Proposta: ${new Date().toLocaleDateString("pt-BR")}</p>
-            <p style="margin-top: 20px; font-size: 14px;">
-                Esta proposta é válida por 30 dias a partir da data de emissão.
+            <p style="margin-top: 20px; font-size: 14px; color: #FF355E; font-weight: bold;">
+                ⏰ Oferta válida apenas durante o período da Black Friday!
+            </p>
+            <p style="margin-top: 10px; font-size: 14px;">
+                Aproveite as condições especiais e transforme a gestão de RH da sua empresa.
             </p>
         </div>
     </div>
@@ -180,7 +200,7 @@ export const ProposalGenerator = ({
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `Proposta_${clientData.companyName.replace(/\s+/g, "_")}_${new Date().toISOString().split("T")[0]}.html`;
+    a.download = `BlackFriday_Factorial_${clientData.companyName.replace(/\s+/g, "_")}_${new Date().toISOString().split("T")[0]}.html`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -190,19 +210,23 @@ export const ProposalGenerator = ({
   };
 
   return (
-    <Card className="mt-6 border-2 shadow-lg animate-fade-in">
+    <Card className="mt-6 border-4 border-radical shadow-2xl animate-fade-in bg-gradient-to-br from-card via-card to-radical/5">
       <CardContent className="pt-6">
+        <div className="text-center mb-4">
+          <p className="text-lg font-bold text-radical mb-1">🔥 Black Friday 2025</p>
+          <p className="text-sm text-muted-foreground">Gere sua proposta com condições especiais</p>
+        </div>
         <Button
           onClick={generateProposal}
-          className="w-full bg-gradient-primary hover:opacity-90 text-white text-lg py-6 shadow-radical hover:scale-105 transition-all"
+          className="w-full bg-gradient-primary hover:opacity-90 text-white text-lg py-7 shadow-radical hover:scale-105 transition-all font-bold"
           size="lg"
         >
-          <FileText className="mr-2 h-5 w-5" />
-          Gerar Proposta
-          <Download className="ml-2 h-5 w-5" />
+          <FileText className="mr-2 h-6 w-6" />
+          Gerar Proposta Black Friday
+          <Download className="ml-2 h-6 w-6" />
         </Button>
         <p className="text-xs text-center text-muted-foreground mt-3">
-          A proposta será baixada em formato HTML
+          Proposta em HTML com visual exclusivo da Black Friday
         </p>
       </CardContent>
     </Card>
